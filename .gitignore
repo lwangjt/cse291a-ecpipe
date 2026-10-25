@@ -1,0 +1,6 @@
+.env
+*.key
+results/
+data/images/
+models/
+__pycache__/
