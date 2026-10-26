@@ -8,7 +8,10 @@
 # and record the exact build in meta.json via --server-info.
 set -euo pipefail
 MODEL=$1; PORT=$2; MODE=$3; MMPROJ=${4:-}; THREADS=${5:-$(nproc)}
-ARGS=(-m "$MODEL" --port "$PORT" --host 127.0.0.1 -c 8192 -t "$THREADS" --no-webui)
+# CTX = total context, NP = parallel slots (llama-server splits CTX across slots!). Use NP=1 for sequential runs;
+# for concurrency-k runs set NP=k and CTX=k*per-request-need. Planner at 8k ctx needs CTX>=10000 with NP=1.
+CTX=${CTX:-8192}; NP=${NP:-1}
+ARGS=(-m "$MODEL" --port "$PORT" --host 127.0.0.1 -c "$CTX" -np "$NP" -t "$THREADS" --no-webui)
 [[ -n "$MMPROJ" ]] && ARGS+=(--mmproj "$MMPROJ")
 case "$MODE" in
   cpu)        ARGS+=(-ngl 0 --no-mmproj-offload) ;;
