@@ -40,7 +40,10 @@ def summarize(d):
     tps = [r["decode_tps"] for r in warm if r.get("decode_tps")]
     row["decode_tps_p50"] = pct(tps, 50)
     if any("hit" in r for r in recs):    # failures count as misses
-        row["acc_all"] = sum(bool(r.get("hit")) for r in recs) / len(recs)
+        row["acc_all"] = sum(bool(r.get("hit")) for r in recs) / len(recs)          # lenient (point or box center)
+        row["acc_strict"] = sum(bool(r.get("hit")) and r.get("kind") == "point" for r in recs) / len(recs)
+        row["box_output_rate"] = sum(r.get("kind") == "box" for r in recs) / len(recs)
+        row["unparsed_rate"] = sum(not r.get("parsed") for r in recs) / len(recs)
         row["median_dist_px"] = pct([r["dist_px"] for r in ok if r.get("dist_px") is not None], 50)
     m = meta.get("monitor", {})
     nok = max(1, len(ok))

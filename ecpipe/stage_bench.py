@@ -13,7 +13,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from .client import chat_stream, encode_image
 from .sysmon import Monitor, capture_env
-from .workloads import PROMPTS, load_jsonl, make_history_text, parse_point, score
+from .workloads import PROMPTS, load_jsonl, make_history_text, parse_output, score
 
 
 def one_request(a, item, tag):
@@ -27,9 +27,9 @@ def one_request(a, item, tag):
             {"type": "image_url", "image_url": {"url": url}},
             {"type": "text", "text": prompt}]}]
         r = chat_stream(a.base_url, a.model, msgs, a.max_tokens, timeout=a.timeout)
-        pt = parse_point(r["text"], a.coord_space, orig, sent) if r["ok"] else None
+        pt, kind = parse_output(r["text"], a.coord_space, orig, sent) if r["ok"] else (None, None)
         hit, dist = score(pt, item["bbox"])
-        rec.update(sample_id=item["id"], parsed=pt is not None, hit=hit, dist_px=dist,
+        rec.update(sample_id=item["id"], parsed=pt is not None, kind=kind, hit=hit, dist_px=dist,
                    sent_wh=list(sent))
     else:  # planner
         hist = make_history_text(a.ctx_tokens, a.seed + tag["idx"])

@@ -14,7 +14,7 @@ import yaml
 
 from .client import chat_stream, encode_image
 from .sysmon import Monitor, capture_env
-from .workloads import PROMPTS, load_jsonl, make_history_text, parse_point, score
+from .workloads import PROMPTS, load_jsonl, make_history_text, parse_output, score
 
 
 def run_step(cfg, item, idx, seed, data_root):
@@ -51,9 +51,10 @@ def run_step(cfg, item, idx, seed, data_root):
         rec["latency_s"] = time.perf_counter() - t_all
         return rec
     # --- act (simulated: score instead of clicking)
-    pt = parse_point(r2["text"], g.get("coord_space", "norm1000"), orig, sent)
+    pt, kind = parse_output(r2["text"], g.get("coord_space", "norm1000"), orig, sent)
     rec["hit"], rec["dist_px"] = score(pt, item["bbox"])
     rec["parsed"] = pt is not None
+    rec["kind"] = kind
     rec["ok"] = True
     rec["latency_s"] = time.perf_counter() - t_all
     return rec

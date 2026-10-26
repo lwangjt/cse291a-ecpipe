@@ -78,3 +78,35 @@ def make_history_text(approx_tokens, seed):
         words += len(line.split())
         k += 1
     return "\n".join(lines)
+
+
+_BOX_PATTERNS = [re.compile(r"[(\[]\s*" + _NUM + r"\s*,\s*" + _NUM + r"\s*,\s*" + _NUM + r"\s*,\s*" + _NUM + r"\s*[)\]]")]
+
+
+def parse_output(text, coord_space, orig_wh, sent_wh):
+    """Return (point_in_original_pixels_or_None, kind) with kind in {'point','box',None}.
+    A 4-number box is converted to its center (kind='box'). Report strict accuracy
+    (kind=='point' only, i.e. the requested format) and lenient accuracy (point or box)."""
+    text = text or ""
+    ow, oh = orig_wh
+    sw, sh = sent_wh
+
+    def conv(x, y):
+        if coord_space == "norm1000":
+            return x / 1000 * ow, y / 1000 * oh
+        if coord_space == "norm1":
+            return x * ow, y * oh
+        if coord_space == "pixel":
+            return x * ow / sw, y * oh / sh
+        raise ValueError(coord_space)
+
+    for pat in _BOX_PATTERNS:
+        m = pat.search(text)
+        if m:
+            x1, y1, x2, y2 = (float(m.group(i)) for i in range(1, 5))
+            return conv((x1 + x2) / 2, (y1 + y2) / 2), "box"
+    for pat in _PATTERNS:
+        m = pat.search(text)
+        if m:
+            return conv(float(m.group(1)), float(m.group(2))), "point"
+    return None, None
