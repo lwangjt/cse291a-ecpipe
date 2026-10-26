@@ -16,6 +16,11 @@ from .sysmon import Monitor, capture_env
 from .workloads import PROMPTS, load_jsonl, make_history_text, parse_output, score
 
 
+def CP(a):
+    """Per-request extras: disable llama.cpp prompt/KV reuse so repeated samples are not served from cache."""
+    return {"cache_prompt": False} if a.prompt_cache == "off" else None
+
+
 def one_request(a, item, tag):
     rec = dict(label=a.label, stage=a.stage, **tag)
     if a.stage == "grounding":
@@ -26,7 +31,7 @@ def one_request(a, item, tag):
         msgs = [{"role": "user", "content": [
             {"type": "image_url", "image_url": {"url": url}},
             {"type": "text", "text": prompt}]}]
-        r = chat_stream(a.base_url, a.model, msgs, a.max_tokens, timeout=a.timeout)
+        r = chat_stream(a.base_url, a.model, msgs, a.max_tokens, timeout=a.timeout, extra=CP(a))
         pt, kind = parse_output(r["text"], a.coord_space, orig, sent) if r["ok"] else (None, None)
         hit, dist = score(pt, item["bbox"])
         rec.update(sample_id=item["id"], parsed=pt is not None, kind=kind, hit=hit, dist_px=dist,
@@ -36,7 +41,7 @@ def one_request(a, item, tag):
         msgs = [{"role": "user", "content":
                  f"You control a computer.\nHistory:\n{hist}\n\nDecide the next action. "
                  "Answer in one short sentence."}]
-        r = chat_stream(a.base_url, a.model, msgs, a.max_tokens, timeout=a.timeout)
+        r = chat_stream(a.base_url, a.model, msgs, a.max_tokens, timeout=a.timeout, extra=CP(a))
     rec.update({k: r[k] for k in ("ok", "error", "latency_s", "ttft_s", "decode_tps",
                                    "prompt_tokens", "completion_tokens", "server_timings",
                                    "t_start")})
@@ -64,6 +69,8 @@ def main():
     p.add_argument("--server-pid", type=int, action="append", default=[])
     p.add_argument("--server-info", default="", help="server version/flags, free text")
     p.add_argument("--seed", type=int, default=0)
+    p.add_argument("--prompt-cache", choices=["off", "default"], default="off",
+                   help="off: send cache_prompt=false (llama.cpp). Use default for remote/vLLM endpoints.")
     p.add_argument("--out-dir", default="results")
     a = p.parse_args()
 

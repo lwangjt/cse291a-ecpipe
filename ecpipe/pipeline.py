@@ -17,6 +17,10 @@ from .sysmon import Monitor, capture_env
 from .workloads import PROMPTS, load_jsonl, make_history_text, parse_output, score
 
 
+def _cp(stage_cfg):
+    return {"cache_prompt": False} if stage_cfg.get("prompt_cache", "off") == "off" else None
+
+
 def run_step(cfg, item, idx, seed, data_root):
     g, pl = cfg["stages"]["grounding"], cfg["stages"]["planner"]
     rec = dict(sample_id=item["id"], ok=False, error=None, stage_times={})
@@ -31,7 +35,7 @@ def run_step(cfg, item, idx, seed, data_root):
     r = chat_stream(pl["base_url"], pl["model"], [{"role": "user", "content":
         f"You control a computer.\nHistory:\n{hist}\n\nGoal: {item['instruction']}\n"
         "Describe in one short sentence the UI element to interact with next."}],
-        pl.get("max_tokens", 48), timeout=pl.get("timeout", 300))
+        pl.get("max_tokens", 48), timeout=pl.get("timeout", 300), extra=_cp(pl))
     rec["stage_times"]["planner"] = r["latency_s"]
     rec["planner_ttft_s"], rec["planner_prompt_tokens"] = r["ttft_s"], r["prompt_tokens"]
     if not r["ok"]:
@@ -43,7 +47,7 @@ def run_step(cfg, item, idx, seed, data_root):
     r2 = chat_stream(g["base_url"], g["model"], [{"role": "user", "content": [
         {"type": "image_url", "image_url": {"url": url}},
         {"type": "text", "text": PROMPTS[g.get("prompt", "structured")].format(instruction=target)}]}],
-        g.get("max_tokens", 64), timeout=g.get("timeout", 300))
+        g.get("max_tokens", 64), timeout=g.get("timeout", 300), extra=_cp(g))
     rec["stage_times"]["grounding"] = r2["latency_s"]
     rec["grounding_ttft_s"] = r2["ttft_s"]
     if not r2["ok"]:
