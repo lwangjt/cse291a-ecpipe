@@ -84,8 +84,11 @@ def main():
     with Monitor(pids=a.server_pid) as mon:
         t0 = time.perf_counter()
         if a.concurrency == 1:
-            for it, tag in work:
+            for k, (it, tag) in enumerate(work, 1):
                 recs.append(one_request(a, it, tag))
+                r = recs[-1]
+                print(f"[{k}/{len(work)}] pass {tag['pass']} idx {tag['idx']} ok={r['ok']} "
+                      f"{r['latency_s']:.1f}s", flush=True)
         else:
             recs.append(one_request(a, *work[0]))      # 'first' request alone
             with ThreadPoolExecutor(a.concurrency) as ex:
