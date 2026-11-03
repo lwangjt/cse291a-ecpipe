@@ -1,0 +1,7 @@
+name: B1-all-cpu
+planner_feeds_grounding: false
+workload: {ctx_tokens: 2000}
+stages:
+  planner:   {base_url: "http://127.0.0.1:8002/v1", model: planner, max_tokens: 48}
+  grounding: {base_url: "http://127.0.0.1:8001/v1", model: vlm, prompt: structured, coord_space: pixel, max_pixels: 500000, max_tokens: 64}
+server_pids: [50996, 50997]

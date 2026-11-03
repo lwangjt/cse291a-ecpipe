@@ -1,0 +1,52 @@
+{
+ "args": {
+  "stage": "grounding",
+  "base_url": "http://127.0.0.1:8001/v1",
+  "model": "vlm",
+  "label": "aws-gpu-qwenvl-250k",
+  "data": "data/dev.jsonl",
+  "data_root": "data",
+  "n": 100,
+  "passes": 3,
+  "prompt": "structured",
+  "coord_space": "pixel",
+  "max_pixels": 250000,
+  "ctx_tokens": 2000,
+  "max_tokens": 64,
+  "concurrency": 1,
+  "timeout": 300,
+  "server_pid": [
+   6177
+  ],
+  "server_info": "llama.cpp version: 0.8.0-dev (build 12020, commit 0ec4027a2); Qwen2.5-VL-3B Q4_K_M; L4 gpu",
+  "seed": 0,
+  "prompt_cache": "off",
+  "out_dir": "results"
+ },
+ "env": {
+  "platform": "Linux-7.0.0-1014-aws-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "cpu": "AMD EPYC 7R13 Processor",
+  "logical_cores": 8,
+  "ram_gb": 30.2,
+  "gpu": "NVIDIA L4, 595.112.07, 23034 MiB",
+  "git_rev": "2716e59",
+  "hostname": "ip-172-31-57-228",
+  "server_info": "llama.cpp version: 0.8.0-dev (build 12020, commit 0ec4027a2); Qwen2.5-VL-3B Q4_K_M; L4 gpu"
+ },
+ "monitor": {
+  "duration_s": 111.8525185585022,
+  "cpu_util_mean": 14.202538071065993,
+  "cpu_util_max": 94.4,
+  "gpu_util_mean": 74.49492385786802,
+  "gpu_power_mean_w": 65.37332487309645,
+  "gpu_mem_max_mb": 3874.0,
+  "server_rss_max_mb": 5596.046875,
+  "cpu_energy_j": null,
+  "gpu_energy_j": 7302.108530333042,
+  "n_samples": 394
+ },
+ "wall_s": 111.85138050400201,
+ "n_requests": 300,
+ "throughput_rps": 2.682130507895395
+}

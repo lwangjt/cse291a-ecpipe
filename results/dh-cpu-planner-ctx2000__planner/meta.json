@@ -1,0 +1,52 @@
+{
+ "args": {
+  "stage": "planner",
+  "base_url": "http://127.0.0.1:8002/v1",
+  "model": "planner",
+  "label": "dh-cpu-planner-ctx2000",
+  "data": null,
+  "data_root": ".",
+  "n": 20,
+  "passes": 1,
+  "prompt": "structured",
+  "coord_space": "norm1000",
+  "max_pixels": null,
+  "ctx_tokens": 2000,
+  "max_tokens": 48,
+  "concurrency": 1,
+  "timeout": 300,
+  "server_pid": [
+   44044
+  ],
+  "server_info": "llama.cpp build 11889 commit d854d98ba, Qwen2.5-3B-Instruct Q4_K_M, 8 threads, DataHub 8 vCPU",
+  "seed": 0,
+  "prompt_cache": "off",
+  "out_dir": "results"
+ },
+ "env": {
+  "platform": "Linux-6.1.0-51-amd64-x86_64-with-glibc2.35",
+  "python": "3.11.9",
+  "cpu": "AMD EPYC 7763 64-Core Processor",
+  "logical_cores": 64,
+  "ram_gb": 503.6,
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, 580.126.20, [Insufficient Permissions]",
+  "git_rev": "2716e59",
+  "hostname": "dsmlp-jupyter-liw069",
+  "server_info": "llama.cpp build 11889 commit d854d98ba, Qwen2.5-3B-Instruct Q4_K_M, 8 threads, DataHub 8 vCPU"
+ },
+ "monitor": {
+  "duration_s": 363.02786231040955,
+  "cpu_util_mean": 12.74187306501548,
+  "cpu_util_max": 19.1,
+  "gpu_util_mean": null,
+  "gpu_power_mean_w": null,
+  "gpu_mem_max_mb": null,
+  "server_rss_max_mb": 5271.4140625,
+  "cpu_energy_j": null,
+  "gpu_energy_j": null,
+  "n_samples": 1292
+ },
+ "wall_s": 363.0274248942733,
+ "n_requests": 20,
+ "throughput_rps": 0.055092256475732446
+}

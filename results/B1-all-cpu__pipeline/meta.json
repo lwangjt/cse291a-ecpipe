@@ -1,0 +1,60 @@
+{
+ "args": {
+  "config": "configs/B1_all_cpu.yaml",
+  "data": "data/dev.jsonl",
+  "data_root": "data",
+  "n": 20,
+  "passes": 2,
+  "seed": 0,
+  "out_dir": "results"
+ },
+ "config": {
+  "name": "B1-all-cpu",
+  "planner_feeds_grounding": false,
+  "workload": {
+   "ctx_tokens": 2000
+  },
+  "stages": {
+   "planner": {
+    "base_url": "http://127.0.0.1:8002/v1",
+    "model": "planner",
+    "max_tokens": 48
+   },
+   "grounding": {
+    "base_url": "http://127.0.0.1:8001/v1",
+    "model": "vlm",
+    "prompt": "structured",
+    "coord_space": "pixel",
+    "max_pixels": 500000,
+    "max_tokens": 64
+   }
+  },
+  "server_pids": [
+   50996,
+   50997
+  ]
+ },
+ "env": {
+  "platform": "Linux-6.1.0-51-amd64-x86_64-with-glibc2.35",
+  "python": "3.11.9",
+  "cpu": "AMD EPYC 7763 64-Core Processor",
+  "logical_cores": 64,
+  "ram_gb": 503.6,
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, 580.126.20, [Insufficient Permissions]",
+  "git_rev": "2716e59",
+  "hostname": "dsmlp-jupyter-liw069"
+ },
+ "monitor": {
+  "duration_s": 1348.184914112091,
+  "cpu_util_mean": 12.654420350291911,
+  "cpu_util_max": 19.1,
+  "gpu_util_mean": null,
+  "gpu_power_mean_w": null,
+  "gpu_mem_max_mb": null,
+  "server_rss_max_mb": 11520.9609375,
+  "cpu_energy_j": null,
+  "gpu_energy_j": null,
+  "n_samples": 4796
+ },
+ "n_requests": 40
+}

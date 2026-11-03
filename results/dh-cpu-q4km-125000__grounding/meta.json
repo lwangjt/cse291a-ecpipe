@@ -1,0 +1,52 @@
+{
+ "args": {
+  "stage": "grounding",
+  "base_url": "http://127.0.0.1:8001/v1",
+  "model": "vlm",
+  "label": "dh-cpu-q4km-125000",
+  "data": "data/dev.jsonl",
+  "data_root": "data",
+  "n": 100,
+  "passes": 1,
+  "prompt": "structured",
+  "coord_space": "pixel",
+  "max_pixels": 125000,
+  "ctx_tokens": 2000,
+  "max_tokens": 64,
+  "concurrency": 1,
+  "timeout": 300,
+  "server_pid": [
+   858
+  ],
+  "server_info": "version: 0.7.0-dev (build 11889, commit d854d98ba); Qwen2.5-VL-3B Q4_K_M + mmproj Q8_0, 8 threads, DataHub 8 vCPU",
+  "seed": 0,
+  "prompt_cache": "off",
+  "out_dir": "results"
+ },
+ "env": {
+  "platform": "Linux-6.1.0-51-amd64-x86_64-with-glibc2.35",
+  "python": "3.11.9",
+  "cpu": "AMD EPYC 7763 64-Core Processor",
+  "logical_cores": 64,
+  "ram_gb": 503.6,
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, 580.126.20, [Insufficient Permissions]",
+  "git_rev": "2716e59",
+  "hostname": "dsmlp-jupyter-liw069",
+  "server_info": "version: 0.7.0-dev (build 11889, commit d854d98ba); Qwen2.5-VL-3B Q4_K_M + mmproj Q8_0, 8 threads, DataHub 8 vCPU"
+ },
+ "monitor": {
+  "duration_s": 458.8312954902649,
+  "cpu_util_mean": 12.523958333333333,
+  "cpu_util_max": 19.3,
+  "gpu_util_mean": null,
+  "gpu_power_mean_w": null,
+  "gpu_mem_max_mb": null,
+  "server_rss_max_mb": 10344.078125,
+  "cpu_energy_j": null,
+  "gpu_energy_j": null,
+  "n_samples": 1632
+ },
+ "wall_s": 458.8308964520693,
+ "n_requests": 100,
+ "throughput_rps": 0.21794521853967233
+}
